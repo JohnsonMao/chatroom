@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 
 import { register } from "../../redux/actions";
-import HeaderMenu from "../../components/HeaderMenu";
+import HeaderNavbar from "../../components/HeaderNavbar";
 import Logo from "../../components/Logo";
 import useForm from "../../utils/useFormHook";
 
@@ -34,6 +34,7 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch( register(signUpForm));
+    console.log(signUpForm);
   };
 
   // 重新指定路由
@@ -41,7 +42,7 @@ export default function Register() {
 
   return (
     <>
-      <HeaderMenu />
+      <HeaderNavbar title="接案平台"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>

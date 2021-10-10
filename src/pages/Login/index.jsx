@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Form, FloatingLabel, Container, Button } from "react-bootstrap";
 
-import HeaderMenu from "../../components/HeaderMenu";
+import { login } from "../../redux/actions";
+import HeaderNavbar from "../../components/HeaderNavbar";
 import Logo from "../../components/Logo";
 import useForm from "../../utils/useFormHook";
 
@@ -12,13 +14,25 @@ export default function Login() {
     password: "",
   });
 
+  // 取出 msg
+  const msg = useSelector(state => state.user.msg);
+  // 取出 redirectTo
+  const redirectTo = useSelector(state => state.user.redirectTo);
+
+  // 發送 data
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch( login(signInForm));
   };
+
+  // 重新指定路由
+  if (redirectTo) return <Redirect to={redirectTo}/>
 
   return (
     <>
-      <HeaderMenu />
+      <HeaderNavbar title="接案平台"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>
@@ -43,6 +57,8 @@ export default function Login() {
             <Link to="/register">沒有帳號 ?</Link>
             <Button type="submit">登入</Button>
           </div>
+
+          { msg ? <div className="text-center text-danger">{msg}</div> : null }
         </Form>
       </Container>
     </>

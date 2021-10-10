@@ -8,7 +8,7 @@ const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg});
 
 // 註冊非同步 action
 export const register = (user) => {
-  const {username, password, checkPassword, type} = user;
+  const {username, password, checkPassword, userType} = user;
   // 前端驗證
   if (!username.trim()) {
     return errorMsg("請輸入帳號！")
@@ -17,7 +17,8 @@ export const register = (user) => {
   }
 
   return async (dispatch) => {
-    const response = await reqRegister({username, password, type});
+    console.log({username, password, userType})
+    const response = await reqRegister({username, password, userType});
     const result = response.data;  // { code: 0/1, data: user, msg: ''};
     if (result.code === 0) {  // 成功
       dispatch (authSuccess (result.data));

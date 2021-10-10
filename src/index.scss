@@ -24,4 +24,11 @@
 @import '~bootstrap/scss/bootstrap';
 @import "./assets/scss/custom_variable";
 
+* { 
+  touch-action: pan-y;  
+}
+body {
+  padding-top: 56px;
+}
+
 @import "~bootstrap/scss/utilities/api";
