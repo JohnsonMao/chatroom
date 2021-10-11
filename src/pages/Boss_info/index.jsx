@@ -1,28 +1,69 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, FloatingLabel, Container, Button } from 'react-bootstrap';
 
 import HeaderNavbar from '../../components/HeaderNavbar';
 import AvaterSelector from '../../components/Avater_selector';
+import useForm from "../../utils/useFormHook";
+import { updateUser } from '../../redux/actions';
 
 export default function BossInfo() {
+
+  const [bossForm, setBossForm] = useForm({
+    avater: 'cat-1',
+    name: '',
+    post: '',
+    info: '',
+    company: '',
+    salary: ''
+  });
+
 
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch( updateUser(bossForm));
+  }
+
+  const setAvater = (e) => {
+    setBossForm({
+      target: {
+        name: "avater",
+        value: e.avater
+      }
+    })
+  }
+
+  // 重新指定路由
+  const name = useSelector(state => state.user.name);
+  const userType = useSelector(state => state.user.userType);
+  console.log(name);
+  if (name) {
+    console.log(userType);
+    return <Redirect to={"/" + userType}/>
   }
 
   return (
     <>
       <HeaderNavbar title="老闆資料設定"/>
       <Container>
-        <AvaterSelector />
         <Form onSubmit={handleSubmit}>
+          <AvaterSelector setAvater={setAvater} avater={bossForm.avater} />
+
+          <FloatingLabel controlId="name" label="名稱" className="mb-3">
+            <Form.Control
+              name="name"
+              onChange={setBossForm}
+              placeholder="請輸入名稱"
+            />
+          </FloatingLabel>
+
           <FloatingLabel controlId="post" label="招聘職位" className="mb-3">
             <Form.Control
               name="post"
-              // onChange={setSignInForm}
+              onChange={setBossForm}
               placeholder="請輸入招聘職位"
             />
           </FloatingLabel>
@@ -30,7 +71,7 @@ export default function BossInfo() {
           <FloatingLabel controlId="company" label="公司名稱" className="mb-3">
             <Form.Control
               name="company"
-              // onChange={setSignInForm}
+              onChange={setBossForm}
               placeholder="請輸入公司名稱"
             />
           </FloatingLabel>
@@ -38,7 +79,7 @@ export default function BossInfo() {
           <FloatingLabel controlId="salary" label="職位薪資" className="mb-3">
             <Form.Control
               name="salary"
-              // onChange={setSignInForm}
+              onChange={setBossForm}
               placeholder="請輸入職位薪資"
             />
           </FloatingLabel>
@@ -47,7 +88,7 @@ export default function BossInfo() {
             <Form.Control
               as="textarea"
               name="info"
-              // onChange={setSignInForm}
+              onChange={setBossForm}
               placeholder="請輸入職位簡介"
               style={{ height: '100px' }}
             />

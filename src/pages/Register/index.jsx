@@ -16,6 +16,7 @@ import Logo from "../../components/Logo";
 import useForm from "../../utils/useFormHook";
 
 export default function Register() {
+  
   const [signUpForm, setSignUpForm] = useForm({
     username: "",
     password: "",
@@ -34,7 +35,6 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch( register(signUpForm));
-    console.log(signUpForm);
   };
 
   // 重新指定路由
