@@ -33,6 +33,10 @@ export default function FreelanceInfo() {
     })
   }
   
+  // 重新指定路由
+  const { name, userType } = useSelector(state => state.user);
+  if (name) return <Redirect to={"/" + userType}/>
+
   return (
     <>
       <HeaderNavbar title="接案者資料設定"/>

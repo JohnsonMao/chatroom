@@ -37,14 +37,9 @@ export default function BossInfo() {
   }
 
   // 重新指定路由
-  const name = useSelector(state => state.user.name);
-  const userType = useSelector(state => state.user.userType);
-  console.log(name);
-  if (name) {
-    console.log(userType);
-    return <Redirect to={"/" + userType}/>
-  }
-
+  const { name, userType } = useSelector(state => state.user);
+  if (name) return <Redirect to={"/" + userType}/>
+  
   return (
     <>
       <HeaderNavbar title="老闆資料設定"/>
