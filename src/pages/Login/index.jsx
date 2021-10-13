@@ -20,7 +20,6 @@ export default function Login() {
   // 取出 redirectTo
   const redirectTo = useSelector(state => state.user.redirectTo);
 
-  // 發送 data
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {

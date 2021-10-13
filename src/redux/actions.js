@@ -1,4 +1,4 @@
-import { reqRegister, reqLogin, reqUpdateUser } from "../api";
+import { reqRegister, reqLogin, reqUpdateUser, reqUser } from "../api";
 import {
   AUTH_SUCCESS,
   ERROR_MSG,
@@ -73,3 +73,16 @@ export const updateUser = (user) => {
     }
   };
 };
+
+// 獲取使用者資料非同步 action
+export const getUser = () => {
+  return async dispatch => {
+    const response = await reqUser;
+    const result = response.data;
+    if (result.code === 0) {
+      dispatch(receiveUser(result.data));
+    } else {
+      dispatch(resetUser(result.msg));
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 
 import BossInfo from '../Boss_info';
 import FreelanceInfo from '../Freelance_info';
 import getRedirectTo from '../../utils/getRedirectTo';
+import { getUser } from '../../redux/actions';
 
 export default function Main() {
 
@@ -15,10 +16,12 @@ export default function Main() {
   const userid = Cookies.get('userid');
   // 獲取當前路徑
   let path = useLocation();
+
+  const dispatch = useDispatch();
   // 判斷自動登入
   useEffect(()=>{
     if (userid && !user._id) {
-      console.log("發送自動登入")
+      dispatch(getUser());
     } 
   },[])
 
