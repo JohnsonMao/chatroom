@@ -77,7 +77,7 @@ export const updateUser = (user) => {
 // 獲取使用者資料非同步 action
 export const getUser = () => {
   return async dispatch => {
-    const response = await reqUser;
+    const response = await reqUser();
     const result = response.data;
     if (result.code === 0) {
       dispatch(receiveUser(result.data));
