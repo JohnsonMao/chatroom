@@ -104,7 +104,7 @@ export default function Register() {
           
           <div className="d-flex justify-content-between align-items-center">
             <Link to="/login">已有帳號 ?</Link>
-            <Button type="submit">註冊</Button>
+            <Button type="submit" className="btn-primary">註冊</Button>
           </div>
 
           { msg ? <div className="text-center text-danger">{msg}</div> : null }

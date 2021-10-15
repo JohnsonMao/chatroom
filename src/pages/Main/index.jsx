@@ -13,7 +13,6 @@ import Error from '../Error';
 
 import HeaderNavbar from '../../components/HeaderNavbar';
 import FooterNavbar from '../../components/FooterNavbar';
-import navList from '../../config/navList';
 import getRedirectTo from '../../utils/getRedirectTo';
 import { getUser } from '../../redux/actions';
 
@@ -48,7 +47,48 @@ export default function Main() {
     }
   }
 
+  // route
+  const navList = [
+    {
+      path: '/boss',
+      component: Boss,
+      title: '接案者清單',
+      icon: "handshake",
+      text: '接案者'
+    },
+    {
+      path: '/freelance',
+      component: Freelance,
+      title: '老闆清單',
+      icon: "handshake",
+      text: '老闆'
+    },
+    {
+      path: '/message',
+      component: Message,
+      title: '訊息清單',
+      icon: "comment-dots",
+      text: '訊息'
+    },
+    {
+      path: '/user',
+      component: User,
+      title: '設定個人資料',
+      icon: "user",
+      text: '個人'
+    },
+  ]
+
   const currentNav = navList.find(nav => nav.path === path);
+
+  // 根據用戶類型過濾 FooterNavbar 的 navList
+  if (currentNav) {
+    if (user.userType === 'boss') {
+      navList[1].hide = true;
+    } else {
+      navList[0].hide = true;
+    }
+  }
 
   return (
     <>

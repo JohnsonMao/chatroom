@@ -26,7 +26,7 @@ export default function AvaterSelector(props) {
         data-avater={item.src}>
         <Card.Img variant="top" 
           src={require(`../../assets/avaters/${item.src}.png`).default} 
-          alt={item.name} 
+          alt={item.src} 
           data-avater={item.src}/>
         <Card.Title 
           className="text-center m-0 pt-1"

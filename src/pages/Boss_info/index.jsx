@@ -89,7 +89,7 @@ export default function BossInfo() {
             />
           </FloatingLabel>
 
-          <Button type="submit" className="w-100">保 存</Button>
+          <Button type="submit" className="btn-primary w-100">保 存</Button>
         </Form>
       </Container>
     </>

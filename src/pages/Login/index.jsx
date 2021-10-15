@@ -55,7 +55,7 @@ export default function Login() {
 
           <div className="d-flex justify-content-between align-items-center">
             <Link to="/register">沒有帳號 ?</Link>
-            <Button type="submit">登入</Button>
+            <Button type="submit" className="btn-primary">登入</Button>
           </div>
 
           { msg ? <div className="text-center text-danger">{msg}</div> : null }

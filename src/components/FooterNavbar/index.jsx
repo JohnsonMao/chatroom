@@ -10,7 +10,9 @@ FooterNavbar.propTypes = {
 
 export default function FooterNavbar(props) {
 
-  const { navList } = props;
+  let { navList } = props;
+
+  navList = navList.filter(item => !item.hide);
 
   return (
     <>
