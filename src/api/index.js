@@ -9,3 +9,5 @@ export const reqLogin = (user) => ajax('/login', user, "POST");
 export const reqUpdateUser = (user) => ajax('/update', user, "POST");
 /* 獲取使用者資料 API */
 export const reqUser = () => ajax('/user');
+/* 獲取用戶列表 API */
+export const reqUserList = (type) => ajax('/userlist', {type})

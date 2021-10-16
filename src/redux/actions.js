@@ -1,9 +1,16 @@
-import { reqRegister, reqLogin, reqUpdateUser, reqUser } from "../api";
+import {
+  reqRegister,
+  reqLogin,
+  reqUpdateUser,
+  reqUser,
+  reqUserList,
+} from "../api";
 import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RECEIVE_USER,
   RESET_USER,
+  RECEIVE_USER_LIST,
 } from "./action-types";
 
 // 授權成功同步 action
@@ -11,10 +18,14 @@ const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
 // 錯誤訊息同步 action
 const errorMsg = (msg) => ({ type: ERROR_MSG, data: msg });
 // 接收使用者同步 action
-const receiveUser = (user) => ({ type: RECEIVE_USER, data: user})
+const receiveUser = (user) => ({ type: RECEIVE_USER, data: user });
 // 重置使用者同步 action
-const resetUser = (msg) => ({ type: RESET_USER, data: msg})
-
+export const resetUser = (msg) => ({ type: RESET_USER, data: msg });
+// 接收使用者列表同步 action
+export const receiveUserList = (userList) => ({
+  type: RECEIVE_USER_LIST,
+  data: userList,
+});
 
 // 註冊非同步 action
 export const register = (user) => {
@@ -76,7 +87,7 @@ export const updateUser = (user) => {
 
 // 獲取使用者資料非同步 action
 export const getUser = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     const response = await reqUser();
     const result = response.data;
     if (result.code === 0) {
@@ -84,5 +95,16 @@ export const getUser = () => {
     } else {
       dispatch(resetUser(result.msg));
     }
-  }
-}
+  };
+};
+
+// 獲取使用者列表非同步 action
+export const getUserList = (type) => {
+  return async (dispatch) => {
+    const response = await reqUserList(type);
+    const result = response.data;
+    if (result.code === 0) {
+      dispatch(receiveUserList(result.data));
+    }
+  };
+};
