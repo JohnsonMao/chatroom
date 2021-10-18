@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card, ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -9,13 +10,14 @@ UserList.propTypes = {
 export default function UserList(props) {
 
   const { userList } = props;
+  const history = useHistory();
 
   return (
     <ListGroup as="ul" variant="flush">
       {
       userList.map(user => (
         <ListGroup.Item as="li" key={user._id} className="mb-2 border-0">
-          <Card>
+          <Card onClick={() => history.push(`/chat/${user._id}`)}>
             <Card.Body className="d-flex align-items-center">
               <div className="frame ratio ratio-1x1">
                 <Card.Img varient="top" 

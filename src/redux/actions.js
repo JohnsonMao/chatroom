@@ -1,9 +1,12 @@
+import io from "socket.io-client";
 import {
   reqRegister,
   reqLogin,
   reqUpdateUser,
   reqUser,
   reqUserList,
+  reqChatMsgList,
+  reqReadMsg,
 } from "../api";
 import {
   AUTH_SUCCESS,
@@ -11,7 +14,39 @@ import {
   RECEIVE_USER,
   RESET_USER,
   RECEIVE_USER_LIST,
+  RECEIVE_MSG_LIST,
+  RECEIVE_MSG,
 } from "./action-types";
+
+function initSocketIO() {
+  if (!io.socket) {
+    io.socket = io("ws://localhost:4000");
+
+    // 接收訊息
+    io.socket.on("receiveMsg", function (chatMsg) {
+      console.log("接收訊息", chatMsg);
+    });
+  }
+}
+
+// 獲取訊息列表
+async function getMsgList (dispatch) {
+  initSocketIO();   // 初始化 socket
+  const response = await reqChatMsgList();
+  const result = response.data;
+  if (result.code === 0) {
+    const { users, chatMsgs } = result.data;
+    dispatch( receiveMsgList({users, chatMsgs}));
+  }
+}
+
+// 發送訊息的非同步 action
+export const sendMsg = ({ from, to, content }) => {
+  return (dispatch) => {
+    console.log("發送訊息", { from, to, content });
+    io.socket.emit("sendMsg", { from, to, content });
+  };
+};
 
 // 授權成功同步 action
 const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
@@ -25,6 +60,11 @@ export const resetUser = (msg) => ({ type: RESET_USER, data: msg });
 export const receiveUserList = (userList) => ({
   type: RECEIVE_USER_LIST,
   data: userList,
+});
+// 接收訊息列表的同步 action
+export const receiveMsgList = ({ users, chatMsgs }) => ({
+  type: RECEIVE_MSG_LIST,
+  data: { users, chatMsgs },
 });
 
 // 註冊非同步 action
@@ -42,6 +82,7 @@ export const register = (user) => {
     const result = response.data; // { code: 0/1, data: user, msg: ''};
     if (result.code === 0) {
       // 成功
+      getMsgList(dispatch);
       dispatch(authSuccess(result.data));
     } else {
       // 失敗
@@ -64,6 +105,7 @@ export const login = (user) => {
     const result = response.data;
     if (result.code === 0) {
       // 成功
+      getMsgList(dispatch);
       dispatch(authSuccess(result.data));
     } else {
       // 失敗
@@ -91,6 +133,7 @@ export const getUser = () => {
     const response = await reqUser();
     const result = response.data;
     if (result.code === 0) {
+      getMsgList(dispatch);
       dispatch(receiveUser(result.data));
     } else {
       dispatch(resetUser(result.msg));

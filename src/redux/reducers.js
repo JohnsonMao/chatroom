@@ -5,6 +5,8 @@ import {
   RECEIVE_USER,
   RESET_USER,
   RECEIVE_USER_LIST,
+  RECEIVE_MSG_LIST,
+  RECEIVE_MSG
 } from "./action-types";
 
 import getRedirectTo from "../utils/getRedirectTo";
@@ -45,7 +47,32 @@ function userList(state = initUserList, action) {
   }
 }
 
+const initChat = {
+  users: {},
+  chatMsgs: [],
+  unReadCound: 0
+}
+
+// 產生聊天狀態的 reducer
+
+function chat(state = initChat, action) {
+  switch (action.type) {
+    case RECEIVE_MSG_LIST:  // data: {users, chatMsgs}
+      const { users, chatMsgs } = action.data;
+      return {
+        users,
+        chatMsgs,
+        unReadCound: 0
+      }
+    case RECEIVE_MSG:
+      return 
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   user,
-  userList
+  userList,
+  chat
 });

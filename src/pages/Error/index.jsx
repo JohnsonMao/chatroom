@@ -4,7 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 
 export default function Error() {
   
-  let history = useHistory();
+  const history = useHistory();
 
   return (
     <Container>

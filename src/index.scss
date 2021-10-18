@@ -44,10 +44,15 @@ body {
 .frame {
   width: 50%;
   align-self: center;
-  img {
-    object-fit: cover;
-    object-position: top;
+
+  &-chat {
+    width: 15%;
   }
+}
+
+img {
+  object-fit: cover;
+  object-position: top;
 }
 
 @import "~bootstrap/scss/utilities/api";

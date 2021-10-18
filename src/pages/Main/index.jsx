@@ -8,6 +8,7 @@ import FreelanceInfo from '../Freelance_info';
 import Boss from '../Boss';
 import Freelance from '../Freelance';
 import Message from '../Message';
+import Chat from '../Chat';
 import User from '../User';
 import Error from '../Error';
 
@@ -103,6 +104,7 @@ export default function Main() {
         }
         <Route path="/bossinfo" component={BossInfo}/>
         <Route path="/freelanceinfo" component={FreelanceInfo}/>
+        <Route path="/chat/:userid" component={Chat}/>
         <Route component={Error}/>
       </Switch>
       {
