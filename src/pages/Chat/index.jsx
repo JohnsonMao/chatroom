@@ -1,56 +1,78 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
-import { Container, Card, Button, InputGroup, FormControl } from 'react-bootstrap';
+import React, { useState } from "react";
+import { useParams } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  Container,
+  Card,
+  Button,
+  InputGroup,
+  FormControl,
+  ListGroup
+} from "react-bootstrap";
 
-import { sendMsg } from '../../redux/actions';
-import HeaderNavbar from '../../components/HeaderNavbar';
+import { sendMsg } from "../../redux/actions";
+import HeaderNavbar from "../../components/HeaderNavbar";
 
 export default function Chat() {
-  
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
+  const { users, chatMsgs } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const { userid } = useParams();
-  const [ content, setContent ] = useState('');
+  const [content, setContent] = useState("");
 
-  const handleSend = () => {
-    const from = user._id;
-    const to = userid;
-    if (content) {
-      dispatch( sendMsg({from, to, content}));
+  const meId = user._id; // 我的 id
+  const targetId = userid; // 對方 id
+  const chatId = [meId, targetId].sort().join("_"); // 組合 id
+  if (!users[meId]) return null; // 當資料還沒來時，先回傳 null
+
+  const msgs = chatMsgs.filter((msg) => msg.chat_id === chatId);
+
+  const handleSend = (e) => {
+    if (!e.keyCode || e.keyCode === 13) {
+      const from = user._id;
+      const to = userid;
+      if (content) {
+        dispatch(sendMsg({ from, to, content }));
+      }
+      setContent("");
     }
-    setContent('');
-  }
+  };
+
+  const { target, me } = {
+    target: {
+      style: "flex-row border-0 mb-1",
+      avater: require(`../../assets/avaters/${users[targetId].avater}.png`).default
+    },
+    me: {
+      style: "flex-row-reverse border-0 mb-1",
+      avater: require(`../../assets/avaters/${user.avater}.png`).default
+    },
+  };
 
   return (
     <>
-      <HeaderNavbar title="Name（username）"/>
+      <HeaderNavbar title="Name（username）" />
       <Container className="mt-1">
-      <Card className="flex-row border-0 mb-1">
-          <div className="frame-chat ratio ratio-1x1">
-            <Card.Img src={require(`../../assets/avaters/cat-1.png`).default}
-            alt="cat-1"/>
-          </div>
-          <p className="m-2 mt-3">123</p>
-        </Card>
-        <Card className="flex-row border-0 mb-1">
-          <div className="frame-chat ratio ratio-1x1">
-            <Card.Img src={require(`../../assets/avaters/cat-1.png`).default}
-            alt="cat-1"/>
-          </div>
-          <p className="m-2 mt-3">123</p>
-        </Card>
-        <Card className="flex-row-reverse border-0 mb-1">
-          <div className="frame-chat ratio ratio-1x1">
-            <Card.Img src={require(`../../assets/avaters/cat-1.png`).default}
-            alt="cat-1"/>
-          </div>
-          <p className="m-2 mt-3">123</p>
-        </Card>
+        <ListGroup as="ul" variant="flush">
+          {msgs.map((msg) => (
+            <ListGroup.Item as="li" key={msg._id} className="border-0">
+              <Card className={meId === msg.to ? target.style : me.style}>
+                <div className="frame-chat ratio ratio-1x1">
+                  <Card.Img
+                    src={meId === msg.to ? target.avater : me.avater}
+                    alt="avater"
+                  />
+                </div>
+                <p className="m-2 mt-3">{msg.content}</p>
+              </Card>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
         <InputGroup className="fixed-bottom">
           <FormControl
             placeholder="開始聊天"
-            onChange={e => setContent(e.target.value.trim())}
+            onChange={(e) => setContent(e.target.value.trim())}
+            onKeyUp={handleSend}
             value={content}
             aria-label="Start chat"
             aria-describedby="submit"
@@ -61,5 +83,5 @@ export default function Chat() {
         </InputGroup>
       </Container>
     </>
-  )
+  );
 }

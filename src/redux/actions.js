@@ -18,20 +18,23 @@ import {
   RECEIVE_MSG,
 } from "./action-types";
 
-function initSocketIO() {
+function initSocketIO (dispatch, userid) {
   if (!io.socket) {
     io.socket = io("ws://localhost:4000");
 
     // 接收訊息
     io.socket.on("receiveMsg", function (chatMsg) {
       console.log("接收訊息", chatMsg);
+      if (userid === chatMsg.from || userid === chatMsg.to) {
+        dispatch (receiveMsg(chatMsg))
+      }
     });
   }
 }
 
 // 獲取訊息列表
-async function getMsgList (dispatch) {
-  initSocketIO();   // 初始化 socket
+async function getMsgList (dispatch, userid) {
+  initSocketIO(dispatch, userid);   // 初始化 socket
   const response = await reqChatMsgList();
   const result = response.data;
   if (result.code === 0) {
@@ -57,15 +60,17 @@ const receiveUser = (user) => ({ type: RECEIVE_USER, data: user });
 // 重置使用者同步 action
 export const resetUser = (msg) => ({ type: RESET_USER, data: msg });
 // 接收使用者列表同步 action
-export const receiveUserList = (userList) => ({
+const receiveUserList = (userList) => ({
   type: RECEIVE_USER_LIST,
   data: userList,
 });
 // 接收訊息列表的同步 action
-export const receiveMsgList = ({ users, chatMsgs }) => ({
+const receiveMsgList = ({ users, chatMsgs }) => ({
   type: RECEIVE_MSG_LIST,
   data: { users, chatMsgs },
 });
+// 接收一個訊息的同步 action
+const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg })
 
 // 註冊非同步 action
 export const register = (user) => {
@@ -82,7 +87,7 @@ export const register = (user) => {
     const result = response.data; // { code: 0/1, data: user, msg: ''};
     if (result.code === 0) {
       // 成功
-      getMsgList(dispatch);
+      getMsgList(dispatch, result.data._id);
       dispatch(authSuccess(result.data));
     } else {
       // 失敗
@@ -105,7 +110,7 @@ export const login = (user) => {
     const result = response.data;
     if (result.code === 0) {
       // 成功
-      getMsgList(dispatch);
+      getMsgList(dispatch, result.data._id);
       dispatch(authSuccess(result.data));
     } else {
       // 失敗
@@ -133,7 +138,7 @@ export const getUser = () => {
     const response = await reqUser();
     const result = response.data;
     if (result.code === 0) {
-      getMsgList(dispatch);
+      getMsgList(dispatch, result.data._id);
       dispatch(receiveUser(result.data));
     } else {
       dispatch(resetUser(result.msg));
