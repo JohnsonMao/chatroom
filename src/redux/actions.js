@@ -16,6 +16,7 @@ import {
   RECEIVE_USER_LIST,
   RECEIVE_MSG_LIST,
   RECEIVE_MSG,
+  MSG_READ
 } from "./action-types";
 
 function initSocketIO (dispatch, userid) {
@@ -26,7 +27,7 @@ function initSocketIO (dispatch, userid) {
     io.socket.on("receiveMsg", function (chatMsg) {
       console.log("接收訊息", chatMsg);
       if (userid === chatMsg.from || userid === chatMsg.to) {
-        dispatch (receiveMsg(chatMsg))
+        dispatch (receiveMsg(chatMsg, userid ))
       }
     });
   }
@@ -39,7 +40,7 @@ async function getMsgList (dispatch, userid) {
   const result = response.data;
   if (result.code === 0) {
     const { users, chatMsgs } = result.data;
-    dispatch( receiveMsgList({users, chatMsgs}));
+    dispatch( receiveMsgList({users, chatMsgs, userid}));
   }
 }
 
@@ -50,6 +51,18 @@ export const sendMsg = ({ from, to, content }) => {
     io.socket.emit("sendMsg", { from, to, content });
   };
 };
+
+// 已讀訊息非同步 action
+export const readMsg = (targetId, meId) => {
+  return async (dispatch) => {
+    const response = await reqReadMsg(targetId);
+    const result = response.data;
+    if (result.code === 0) {
+      const count = result.data;
+      dispatch( msgRead({count, targetId, meId}));
+    }
+  }
+}
 
 // 授權成功同步 action
 const authSuccess = (user) => ({ type: AUTH_SUCCESS, data: user });
@@ -65,12 +78,15 @@ const receiveUserList = (userList) => ({
   data: userList,
 });
 // 接收訊息列表的同步 action
-const receiveMsgList = ({ users, chatMsgs }) => ({
+const receiveMsgList = ({ users, chatMsgs, userid }) => ({
   type: RECEIVE_MSG_LIST,
-  data: { users, chatMsgs },
+  data: { users, chatMsgs, userid }
 });
 // 接收一個訊息的同步 action
-const receiveMsg = (chatMsg) => ({ type: RECEIVE_MSG, data: chatMsg })
+const receiveMsg = (chatMsg, userid) => ({ type: RECEIVE_MSG, data: { chatMsg, userid }})
+// 已讀訊息同步 action
+const msgRead = ({count, targetId, meId}) => ({ type: MSG_READ, data: {count, targetId, meId}})
+
 
 // 註冊非同步 action
 export const register = (user) => {

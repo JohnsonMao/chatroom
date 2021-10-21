@@ -13,7 +13,7 @@ import {
   Col
 } from "react-bootstrap";
 
-import { sendMsg } from "../../redux/actions";
+import { sendMsg, readMsg } from "../../redux/actions";
 import HeaderNavbar from "../../components/HeaderNavbar";
 
 export default function Chat() {
@@ -25,15 +25,18 @@ export default function Chat() {
   const [show, setShow] = useState(false);      // 控制顯示表情列表
   const history = useHistory();
 
-  useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-  }, [chatMsgs])
-
-  const emojis = ["😀","😆","😅","😂","🤣","😇","😉","🙂","😋","🙃","😍","🥰","😘","🤪","😝","🤑","😎","🤡","🥳","🤬","🤐","😒","🙄","😱","😵","🤮","😴","😈","🥴","😥","💩","👌"]
-
   const meId = user._id; // 我的 id
   const targetId = userid; // 對方 id
   const chatId = [meId, targetId].sort().join("_"); // 組合 id
+
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+    // 已讀訊息方法
+    dispatch( readMsg(targetId, meId));
+  }, [chatMsgs.length])
+
+  const emojis = ["😀","😆","😅","😂","🤣","😇","😉","🙂","😋","🙃","😍","🥰","😘","🤪","😝","🤑","😎","🤡","🥳","🤬","🤐","😒","🙄","😱","😵","🤮","😴","😈","🥴","😥","💩","👌"]
+
   if (!users[meId]) return null; // 當資料還沒來時，先回傳 null
 
   const msgs = chatMsgs.filter((msg) => msg.chat_id === chatId);

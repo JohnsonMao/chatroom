@@ -21,6 +21,7 @@ export default function Main() {
 
   // 讀取 redux 中的 user 資料
   const user = useSelector(state => state.user);
+  const unReadCount = useSelector(state => state.chat.unReadCount);
   // 讀取 cookie
   const userid = Cookies.get('userid');
   // 獲取當前路徑
@@ -108,7 +109,7 @@ export default function Main() {
         <Route component={Error}/>
       </Switch>
       {
-        currentNav ? <FooterNavbar navList={navList}/> : null
+        currentNav ? <FooterNavbar navList={navList} unReadCount={unReadCount}/> : null
       }
     </>
   )

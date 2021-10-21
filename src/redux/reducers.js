@@ -6,7 +6,8 @@ import {
   RESET_USER,
   RECEIVE_USER_LIST,
   RECEIVE_MSG_LIST,
-  RECEIVE_MSG
+  RECEIVE_MSG,
+  MSG_READ
 } from "./action-types";
 
 import getRedirectTo from "../utils/getRedirectTo";
@@ -50,27 +51,44 @@ function userList(state = initUserList, action) {
 const initChat = {
   users: {},
   chatMsgs: [],
-  unReadCound: 0
-}
+  unReadCount: 0,
+};
 
 // 產生聊天狀態的 reducer
 
 function chat(state = initChat, action) {
   switch (action.type) {
-    case RECEIVE_MSG_LIST:  // data: {users, chatMsgs}
-      const { users, chatMsgs } = action.data;
+    case RECEIVE_MSG_LIST: // data: {users, chatMsgs, userid}
+      const { users, chatMsgs, userid } = action.data;
       return {
         users,
         chatMsgs,
-        unReadCound: 0
-      }
-    case RECEIVE_MSG:       // data: chatMsg
-      const chatMsg = action.data;
+        unReadCount: chatMsgs.reduce(
+          (preTotal, msg) =>
+            preTotal + (!msg.read && msg.to === userid ? 1 : 0),
+          0
+        ),
+      };
+    case RECEIVE_MSG: // data: {chatMsgs, userid}
+      const { chatMsg, userid: id } = action.data;
       return {
         users: state.users,
         chatMsgs: [...state.chatMsgs, chatMsg],
-        unReadCound: 0
-      }
+        unReadCount: state.unReadCount + (!chatMsg.read && chatMsg.to === id ? 1 : 0)
+      };
+    case MSG_READ:
+      const { count, targetId, meId } = action.data;
+      return {
+        users: state.users,
+        chatMsgs: state.chatMsgs.map( msg => {
+          if (msg.from === targetId && msg.to === meId && !msg.read) {
+            return {...msg, read: true};
+          } else {
+            return msg;
+          }
+        }),
+        unReadCount: state.unReadCount - count
+      };
     default:
       return state;
   }
@@ -79,5 +97,5 @@ function chat(state = initChat, action) {
 export default combineReducers({
   user,
   userList,
-  chat
+  chat,
 });
