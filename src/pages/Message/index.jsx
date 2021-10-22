@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
+import QueueAnim from 'rc-queue-anim';
 import { Container, Card, ListGroup, Badge } from "react-bootstrap";
 
 /* 取得每個聊天的最後一條訊息 */
@@ -50,11 +51,12 @@ export default function Message() {
   return (
     <Container>
       <ListGroup as="ul" variant="flush">
+        <QueueAnim type="left">
         {lastMsgs.map((msg) => {
           const targetUserId = msg.to === user._id ? msg.from : msg.to;
           const { avater, name, username } = users[targetUserId];
           return (
-            <ListGroup.Item as="li" key={msg._id}>
+            <ListGroup.Item as="li" key={msg._id} className="border-0">
               <Card className="border-0"
                 onClick={() => history.push(`/chat/${targetUserId}`)}>
                 <Card.Body className="d-flex align-items-center">
@@ -88,6 +90,7 @@ export default function Message() {
             </ListGroup.Item>
           );
         })}
+        </QueueAnim>
       </ListGroup>
     </Container>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import QueueAnim from 'rc-queue-anim';
 import { Card, ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -14,6 +15,7 @@ export default function UserList(props) {
 
   return (
     <ListGroup as="ul" variant="flush">
+      <QueueAnim type="scale">
       {
       userList.map(user => (
         <ListGroup.Item as="li" key={user._id} className="mb-2 border-0">
@@ -36,6 +38,7 @@ export default function UserList(props) {
         </ListGroup.Item>
       ))
       }
+      </QueueAnim>
     </ListGroup>
   )
 }
