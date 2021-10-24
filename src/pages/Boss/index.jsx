@@ -9,10 +9,10 @@ export default function Boss() {
   
   const userList = useSelector(state => state.userList);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch( getUserList("freelance"));
-  },[])
+  },[dispatch])
 
   return (
     <Container>
