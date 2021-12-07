@@ -3,10 +3,9 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 
-import BossInfo from '../Boss_info';
-import FreelanceInfo from '../Freelance_info';
-import Boss from '../Boss';
-import Freelance from '../Freelance';
+import UserInfo from '../User_info';
+import FemalePartner from '../FemalePartner';
+import MalePartner from '../MalePartner';
 import Message from '../Message';
 import Chat from '../Chat';
 import User from '../User';
@@ -52,23 +51,23 @@ export default function Main() {
   // route
   const navList = [
     {
-      path: '/boss',
-      component: Boss,
-      title: '接案者清單',
-      icon: "handshake",
-      text: '接案者'
+      path: '/femalepartner',
+      component: FemalePartner,
+      title: '尋找女伴',
+      icon: "user-friends",
+      text: '女伴'
     },
     {
-      path: '/freelance',
-      component: Freelance,
-      title: '老闆清單',
-      icon: "handshake",
-      text: '老闆'
+      path: '/malepartner',
+      component: MalePartner,
+      title: '尋找男伴',
+      icon: "user-friends",
+      text: '男伴'
     },
     {
       path: '/message',
       component: Message,
-      title: '訊息清單',
+      title: '聊天訊息',
       icon: "comment-dots",
       text: '訊息'
     },
@@ -76,7 +75,7 @@ export default function Main() {
       path: '/user',
       component: User,
       title: '設定個人資料',
-      icon: "user",
+      icon: "user-cog",
       text: '個人'
     },
   ]
@@ -85,10 +84,10 @@ export default function Main() {
 
   // 根據用戶類型過濾 FooterNavbar 的 navList
   if (currentNav) {
-    if (user.userType === 'boss') {
-      navList[1].hide = true;
-    } else {
+    if (user.userType === 'malePartner') {
       navList[0].hide = true;
+    } else {
+      navList[1].hide = true;
     }
   }
 
@@ -103,8 +102,7 @@ export default function Main() {
             <Route key={item.component} path={item.path} component={item.component}/>
           ))
         }
-        <Route path="/bossinfo" component={BossInfo}/>
-        <Route path="/freelanceinfo" component={FreelanceInfo}/>
+        <Route path="/userinfo" component={UserInfo}/>
         <Route path="/chat/:userid" component={Chat}/>
         <Route component={Error}/>
       </Switch>

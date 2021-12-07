@@ -32,7 +32,7 @@ export default function Login() {
 
   return (
     <>
-      <HeaderNavbar title="接案平台"/>
+      <HeaderNavbar title="匿名聊天平台"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>

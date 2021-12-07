@@ -21,7 +21,7 @@ export default function Register() {
     username: "",
     password: "",
     checkPassword: "",
-    userType: "freelance",
+    userType: "femalePartner",
   });
 
   // 取出 msg
@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <>
-      <HeaderNavbar title="接案平台"/>
+      <HeaderNavbar title="匿名聊天平台"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>
@@ -78,16 +78,16 @@ export default function Register() {
 
           <Form.Group as={Row} className="align-items-center g-0 mb-3">
             <Form.Label as="legend" column>
-              用戶類型：
+              尋找伴侶：
             </Form.Label>
             <Col>
               <Form.Check
                 type="radio"
                 name="userType"
                 onChange={setSignUpForm}
-                value="freelance"
-                checked={signUpForm.userType === "freelance"}
-                label="專家"
+                value="femalePartner"
+                checked={signUpForm.userType === "femalePartner"}
+                label="女伴"
               />
             </Col>
             <Col>
@@ -95,9 +95,9 @@ export default function Register() {
                 type="radio"
                 name="userType"
                 onChange={setSignUpForm}
-                value="boss"
-                checked={signUpForm.userType === "boss"}
-                label="老闆"
+                value="malePartner"
+                checked={signUpForm.userType === "malePartner"}
+                label="男伴"
               />
             </Col>
           </Form.Group>

@@ -21,7 +21,8 @@ import {
 
 function initSocketIO (dispatch, userid) {
   if (!io.socket) {
-    io.socket = io("ws://localhost:4000");
+    // io.socket = io("ws://localhost:4500");
+    io.socket = io('http://localhost:5000', {transports: ['websocket']});
 
     // 接收訊息
     io.socket.on("receiveMsg", function (chatMsg) {

@@ -5,13 +5,13 @@ import { Container } from 'react-bootstrap';
 import UserList from '../../components/User_List';
 import { getUserList } from '../../redux/actions';
 
-export default function Freelance() {
+export default function FemalePartner() {
   
   const userList = useSelector(state => state.userList);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
-    dispatch( getUserList("boss"));
+    dispatch( getUserList("malePartner"));
   },[dispatch])
 
   return (

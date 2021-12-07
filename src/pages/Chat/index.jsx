@@ -45,7 +45,7 @@ export default function Chat() {
     if (!e.keyCode || e.keyCode === 13) {
       const from = user._id;
       const to = userid;
-      if (content) {
+      if (content.trim()) {
         dispatch(sendMsg({ from, to, content }));
       }
       setContent("");
@@ -88,7 +88,7 @@ export default function Chat() {
           <InputGroup>
             <FormControl
               placeholder="開始聊天"
-              onChange={(e) => setContent(e.target.value.trim())}
+              onChange={(e) => setContent(e.target.value)}
               onKeyUp={handleSend}
               onFocus={() => setShow(false)}
               value={content}
