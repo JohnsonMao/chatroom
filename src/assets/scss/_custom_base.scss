@@ -12,8 +12,9 @@ body {
 }
 
 ul {
-  padding: 0;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -24,10 +25,15 @@ a {
 img {
   object-fit: cover;
   object-position: top;
+  display: block;
 }
 
-input:focus {
-  outline: 0;
+input,
+button {
+
+  &::placeholder {
+    color: rgba($light, .5);
+  }
 }
 
 input[type='radio'] {

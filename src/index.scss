@@ -35,14 +35,16 @@
     }
   }
 }
-.frame {
-  width: 50%;
-  align-self: center;
+.emoji {
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+  transition: .6s;
 
-  &-chat {
-    width: 15%;
+  &__show {
+    padding-top: 4px;
+    height: 148px;
   }
 }
-
 
 @import "~bootstrap/scss/utilities/api";

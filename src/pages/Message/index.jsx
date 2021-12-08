@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import QueueAnim from "rc-queue-anim";
-import { Container, Card } from "react-bootstrap";
+import { Container, Card, Row, Col } from "react-bootstrap";
 
 /* 取得每個聊天的最後一條訊息 */
 function getLastMsgs(chatMsgs, userid) {
@@ -49,20 +49,20 @@ export default function Message() {
 
   return (
     <Container>
-      <ul className="pt-2">
-        <QueueAnim type="left">
-          {lastMsgs.map((msg) => {
-            const targetUserId = msg.to === user._id ? msg.from : msg.to;
-            const { avater, name, username } = users[targetUserId];
-            return (
-              <li key={msg._id} className="mb-2">
-                <Card
-                  bg="primary"
-                  className="border-0"
-                  onClick={() => history.push(`/chat/${targetUserId}`)}
-                >
-                  <Card.Body className="d-flex align-items-center">
-                    <div className="frame-chat ratio ratio-1x1">
+      <QueueAnim type="left" component="ul" className="pt-2">
+        {lastMsgs.map((msg) => {
+          const targetUserId = msg.to === user._id ? msg.from : msg.to;
+          const { avater, name, username } = users[targetUserId];
+          return (
+            <li key={msg._id} className="mb-2">
+              <Card
+                bg="primary"
+                className="border-0"
+                onClick={() => history.push(`/chat/${targetUserId}`)}
+              >
+                <Card.Body as={Row} className="d-flex align-items-center">
+                  <Col>
+                    <div className="ratio ratio-1x1">
                       <Card.Img
                         varient="top"
                         src={
@@ -73,6 +73,8 @@ export default function Message() {
                         alt="avater"
                       />
                     </div>
+                  </Col>
+                  <Col>
                     <div className="ms-2">
                       <Card.Title className="text-success mb-1">
                         {name}
@@ -80,18 +82,18 @@ export default function Message() {
                       </Card.Title>
                       <Card.Text className="m-0">{msg.content}</Card.Text>
                     </div>
-                    {msg.unReadCount ? (
-                      <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
-                        {msg.unReadCount}
-                      </span>
-                    ) : null}
-                  </Card.Body>
-                </Card>
-              </li>
-            );
-          })}
-        </QueueAnim>
-      </ul>
+                  </Col>
+                  {msg.unReadCount ? (
+                    <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
+                      {msg.unReadCount}
+                    </span>
+                  ) : null}
+                </Card.Body>
+              </Card>
+            </li>
+          );
+        })}
+      </QueueAnim>
     </Container>
   );
 }

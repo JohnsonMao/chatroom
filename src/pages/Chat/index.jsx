@@ -7,8 +7,6 @@ import {
   Container,
   Card,
   Button,
-  InputGroup,
-  FormControl,
   Row,
   Col
 } from "react-bootstrap";
@@ -35,7 +33,7 @@ export default function Chat() {
     dispatch( readMsg(targetId, meId));
   }, [chatMsgs.length, dispatch, meId, targetId])
 
-  const emojis = ["😀","😆","😅","😂","🤣","😇","😉","🙂","😋","🙃","😍","🥰","😘","🤪","😝","🤑","😎","🤡","🥳","🤬","🤐","😒","🙄","😱","😵","🤮","😴","😈","🥴","😥","💩","👌"]
+  const emojis = ["😀","😆","😅","😂","🤣","😇","😉","🙂","😋","🙃","😍","🥰","😘","🤪","😝","🤑","😎","🤡","🥳","🤬","🤐","😒","🙄","😱","😵","🤮","😴","😈","🥴","😥","💩","👌","🧠","🙏","🤒","👻"]
 
   if (!users[meId]) return null; // 當資料還沒來時，先回傳 null
 
@@ -72,50 +70,62 @@ export default function Chat() {
         <ul>
           {msgs.map((msg) => (
             <li key={msg._id}>
-              <Card bg="secondary" className={meId === msg.to ? target.style : me.style}>
-                <div className="frame-chat ratio ratio-1x1">
-                  <Card.Img
-                    src={meId === msg.to ? target.avater : me.avater}
-                    alt="avater"
-                  />
-                </div>
-                <p className="m-2 mt-3">{msg.content}</p>
+              <Card bg="secondary" as={Row} className={meId === msg.to ? target.style : me.style}>
+                <Col xs="2">
+                  <div className="ratio ratio-1x1">
+                    <Card.Img
+                      src={meId === msg.to ? target.avater : me.avater}
+                      alt="avater"
+                    />
+                  </div>
+                </Col>
+                <Col>
+                  <p className="bg-primary p-2">{msg.content}</p>
+                </Col>
               </Card>
             </li>
           ))}
         </ul>
-        <div className="fixed-bottom">
-          <InputGroup className="border border-light">
-            <FormControl
-              placeholder="開始聊天"
-              onChange={(e) => setContent(e.target.value)}
-              onKeyUp={handleSend}
-              onFocus={() => setShow(false)}
-              value={content}
-              className="border-light"
-              aria-label="Start chat"
-              aria-describedby="send"
-            />
-            <Button variant="light" type="button" onClick={() => setShow(!show)}>
-              🙂
-            </Button>
-            <Button variant="light" type="button" id="send" onClick={handleSend}>
-            <FontAwesomeIcon icon={"paper-plane"}/>
-            </Button>
-          </InputGroup>
-          <Row xs="8" className={show ? "bg-light p-2" : "d-none"}>
+      </Container>
+      <div className="fixed-bottom bg-primary py-2">
+        <Container>
+          <Row className="g-1">
+            <Col>
+              <input
+                placeholder="開始聊天"
+                onChange={(e) => setContent(e.target.value)}
+                onKeyUp={handleSend}
+                onFocus={() => setShow(false)}
+                value={content}
+                className="w-100 h-100 bg-secondary border-0 rounded text-light ps-2"
+                aria-label="Start chat"
+                aria-describedby="send"
+              />
+            </Col>
+            <Col xs="auto">
+              <Button variant="primary" type="button" onClick={() => setShow(!show)}>
+                🙂
+              </Button>
+            </Col>
+            <Col xs="auto">
+              <Button variant="primary" type="button" id="send" onClick={handleSend}>
+                <FontAwesomeIcon icon={"paper-plane"}/>
+              </Button>
+            </Col>
+          </Row>
+          <Row xs={6} className={`emoji ${show ? "emoji__show" : ""}`}>
             {
               emojis.map(emoji => (
                 <Col key={emoji}
                   onClick={(e) => setContent(content + e.target.dataset.emoji)}
                   data-emoji={emoji}>
-                  <span data-emoji={emoji}>{ emoji }</span>
+                  <span data-emoji={emoji} className="d-block text-center">{ emoji }</span>
                 </Col>
               ))
             }
           </Row>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </>
   );
 }

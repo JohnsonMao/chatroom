@@ -21,16 +21,20 @@ export default function User() {
   return (
     <Container className="pb-5">
       <Card bg="secondary" className="border-0 my-3">
-        <div className="frame ratio ratio-1x1">
-          <Card.Img varient="top" 
-            src={require(`../../assets/avaters/${user.avater}.png`).default}
-            alt={user.avater}/>
-        </div>
-        <Card.Body className="text-center">
-          <h2 className="fs-3">{user.name}
-            <span className="fs-6">{`（${user.username}）`}</span>
-          </h2>
-          <h3>{user.company}</h3>
+        <Card.Body as={Row} className="align-items-end text-center">
+          <Col xs="4">
+            <div className="ratio ratio-1x1">
+              <Card.Img varient="top" 
+                src={require(`../../assets/avaters/${user.avater}.png`).default}
+                alt={user.avater}/>
+            </div>
+          </Col>
+          <Col>
+            <h2 className="fs-3 text-success">{user.name}
+              <span className="fs-6 text-light">{`（${user.username}）`}</span>
+            </h2>
+            <Link to="userinfo" className="btn btn-primary w-100">編輯資訊</Link>
+          </Col>
         </Card.Body>
       </Card>
       <div className="position-relative border border-dark rounded mb-3 p-3">
@@ -41,18 +45,11 @@ export default function User() {
           <li>簡介：{user.info || "未填寫"}</li>
         </ul>
       </div>
-      <Row className="g-2">
-        <Col>
-          <Link to="userinfo" className="btn btn-primary w-100">修改</Link>
-        </Col>
-        <Col>
-          <Button variant="danger" className="w-100" onClick={toggleShow}>登出</Button>
-        </Col>
-      </Row>
+      <Button variant="danger" className="w-100" onClick={toggleShow}>登出</Button>
 
       <Modal show={show} onHide={toggleShow} centered>
         <Modal.Header className="justify-content-center border-0">
-          <Modal.Title>確定要登出嗎？</Modal.Title>
+          <Modal.Title className="text-primary">確定要登出嗎？</Modal.Title>
         </Modal.Header>
         <Modal.Footer className="row justify-content-center">
           <Button variant="outline-primary" className="col-5" onClick={toggleShow}>
