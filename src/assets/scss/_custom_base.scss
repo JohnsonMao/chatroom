@@ -1,5 +1,14 @@
+@import './custom_variable';
+
+* { 
+  touch-action: pan-y;
+}
+
 body {
-  color: $dark-primary
+  padding-top: 58px;
+  padding-bottom: 48px;
+  background: $body-bg;
+  color: $body-color;
 }
 
 ul {
@@ -8,9 +17,27 @@ ul {
 }
 
 a {
+  color: $success;
   text-decoration: none;
 }
 
 img {
   object-fit: cover;
+  object-position: top;
+}
+
+input:focus {
+  outline: 0;
+}
+
+input[type='radio'] {
+  background: $light;
+}
+
+input[type='radio']:checked {
+  background: $success;
+}
+
+input[type='radio']:checked + label {
+  color: $success;
 }

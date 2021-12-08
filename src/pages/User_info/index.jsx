@@ -13,13 +13,14 @@ export default function UserInfo() {
   const user = useSelector(state => state.user);
 
   const [userForm, setUserForm] = useForm({
-    avater: user?.avater,
+    userType: user?.userType,
+    avater: user?.avater || 'dog-4',
     birthday: user?.birthday || '',
     gender: user?.gender || '',
     name: user?.name || '',
     info: user?.info || ''
   });
-  
+  console.log(user)
   const dispatch = useDispatch();
   
   const setAvater = (e) => {
@@ -62,7 +63,7 @@ export default function UserInfo() {
           </FloatingLabel>
 
           <Form.Group as={Row} className="align-items-center g-0 mb-3">
-            <Form.Label as="legend" column>
+            <Form.Label as="legend" column className="col-4">
               性別：
             </Form.Label>
             <Col>
@@ -73,6 +74,7 @@ export default function UserInfo() {
                 value="男性"
                 checked={userForm.gender === "男性"}
                 label="男性"
+                id="male"
               />
             </Col>
             <Col>
@@ -83,6 +85,7 @@ export default function UserInfo() {
                 value="女性"
                 checked={userForm.gender === "女性"}
                 label="女性"
+                id="female"
               />
             </Col>
             <Col>
@@ -93,6 +96,36 @@ export default function UserInfo() {
                 value="其他"
                 checked={userForm.gender === "其他"}
                 label="其他"
+                id="other"
+              />
+            </Col>
+          </Form.Group>
+
+
+          <Form.Group as={Row} className="align-items-center g-0 mb-3">
+            <Form.Label as="legend" column className="col-4">
+              尋找伴侶：
+            </Form.Label>
+            <Col>
+              <Form.Check
+                type="radio"
+                name="userType"
+                onChange={setUserForm}
+                value="malePartner"
+                checked={userForm.userType === "malePartner"}
+                label="尋找男伴"
+                id="malePartner"
+              />
+            </Col>
+            <Col>
+              <Form.Check
+                type="radio"
+                name="userType"
+                onChange={setUserForm}
+                value="femalePartner"
+                checked={userForm.userType === "femalePartner"}
+                label="尋找女伴"
+                id="femalePartner"
               />
             </Col>
           </Form.Group>

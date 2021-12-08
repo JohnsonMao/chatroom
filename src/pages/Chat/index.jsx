@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Container,
   Card,
   Button,
   InputGroup,
   FormControl,
-  ListGroup,
   Row,
   Col
 } from "react-bootstrap";
@@ -66,13 +66,13 @@ export default function Chat() {
 
   return (
     <>
-      <HeaderNavbar title={`${users[targetId].name}（${users[targetId].username}）`} 
+      <HeaderNavbar title={users[targetId].name} subtitle={`（ ${users[targetId].username} ）`} 
         prev={() => history.goBack()}/>
       <Container className="mt-1">
-        <ListGroup as="ul" variant="flush" className="pb-5">
+        <ul>
           {msgs.map((msg) => (
-            <ListGroup.Item as="li" key={msg._id} className="border-0">
-              <Card className={meId === msg.to ? target.style : me.style}>
+            <li key={msg._id}>
+              <Card bg="secondary" className={meId === msg.to ? target.style : me.style}>
                 <div className="frame-chat ratio ratio-1x1">
                   <Card.Img
                     src={meId === msg.to ? target.avater : me.avater}
@@ -81,11 +81,11 @@ export default function Chat() {
                 </div>
                 <p className="m-2 mt-3">{msg.content}</p>
               </Card>
-            </ListGroup.Item>
+            </li>
           ))}
-        </ListGroup>
+        </ul>
         <div className="fixed-bottom">
-          <InputGroup>
+          <InputGroup className="border border-light">
             <FormControl
               placeholder="開始聊天"
               onChange={(e) => setContent(e.target.value)}
@@ -94,13 +94,13 @@ export default function Chat() {
               value={content}
               className="border-light"
               aria-label="Start chat"
-              aria-describedby="submit"
+              aria-describedby="send"
             />
-            <Button variant="light" id="submit" onClick={() => setShow(!show)}>
+            <Button variant="light" type="button" onClick={() => setShow(!show)}>
               🙂
             </Button>
-            <Button variant="primary" id="submit" onClick={handleSend}>
-              傳送
+            <Button variant="light" type="button" id="send" onClick={handleSend}>
+            <FontAwesomeIcon icon={"paper-plane"}/>
             </Button>
           </InputGroup>
           <Row xs="8" className={show ? "bg-light p-2" : "d-none"}>

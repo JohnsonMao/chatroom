@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <>
-      <HeaderNavbar title="匿名聊天平台"/>
+      <HeaderNavbar title="註冊帳號"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>
@@ -87,7 +87,8 @@ export default function Register() {
                 onChange={setSignUpForm}
                 value="femalePartner"
                 checked={signUpForm.userType === "femalePartner"}
-                label="女伴"
+                label="尋找女伴"
+                id="femalePartner"
               />
             </Col>
             <Col>
@@ -97,14 +98,15 @@ export default function Register() {
                 onChange={setSignUpForm}
                 value="malePartner"
                 checked={signUpForm.userType === "malePartner"}
-                label="男伴"
+                label="尋找男伴"
+                id="malePartner"
               />
             </Col>
           </Form.Group>
           
           <div className="d-flex justify-content-between align-items-center">
             <Link to="/login">已有帳號 ?</Link>
-            <Button type="submit" className="btn-primary">註冊</Button>
+            <Button type="submit" className="btn-light px-4 py-2">註冊</Button>
           </div>
 
           { msg ? <div className="text-center text-danger">{msg}</div> : null }

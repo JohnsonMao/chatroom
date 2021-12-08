@@ -22,22 +22,16 @@
 // 5. Add additional custom code here
 
 @import '~bootstrap/scss/bootstrap';
-@import "./assets/scss/custom_variable";
+@import "./assets/scss/custom_base";
 
-* { 
-  touch-action: pan-y;
-}
-body {
-  padding-top: 56px;
-}
 .nav-item {
   a {
     display: inline-block;
     text-decoration: none;
-    color: darken($light, 50);
+    color: $light;
 
     &.active {
-      color: $primary;
+      color: $success;
     }
   }
 }
@@ -50,9 +44,5 @@ body {
   }
 }
 
-img {
-  object-fit: cover;
-  object-position: top;
-}
 
 @import "~bootstrap/scss/utilities/api";

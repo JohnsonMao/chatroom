@@ -1,8 +1,8 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import QueueAnim from 'rc-queue-anim';
-import { Container, Card, ListGroup, Badge } from "react-bootstrap";
+import QueueAnim from "rc-queue-anim";
+import { Container, Card } from "react-bootstrap";
 
 /* 取得每個聊天的最後一條訊息 */
 function getLastMsgs(chatMsgs, userid) {
@@ -14,7 +14,7 @@ function getLastMsgs(chatMsgs, userid) {
     } else {
       msg.unReadCount = 0;
     }
-    
+
     // 得到 msg 的 id
     const chatId = msg.chat_id;
     const lastMsg = lastMsgObjs[chatId];
@@ -49,48 +49,49 @@ export default function Message() {
 
   return (
     <Container>
-      <ListGroup as="ul" variant="flush">
+      <ul className="pt-2">
         <QueueAnim type="left">
-        {lastMsgs.map((msg) => {
-          const targetUserId = msg.to === user._id ? msg.from : msg.to;
-          const { avater, name, username } = users[targetUserId];
-          return (
-            <ListGroup.Item as="li" key={msg._id} className="border-0">
-              <Card className="border-0"
-                onClick={() => history.push(`/chat/${targetUserId}`)}>
-                <Card.Body className="d-flex align-items-center">
-                  <div className="frame-chat ratio ratio-1x1">
-                    <Card.Img
-                      varient="top"
-                      src={
-                        require(`../../assets/avaters/${avater || `dog-1`}.png`)
-                          .default
-                      }
-                      alt="avater"
-                    />
-                  </div>
-                  <div className="ms-2">
-                    <Card.Title className="mb-1">
-                      {`${name}（${username}）`}
-                    </Card.Title>
-                    <Card.Text className="text-dark m-0">
-                      {msg.content}
-                    </Card.Text>
-                  </div>
-                  {
-                    msg.unReadCount ? (
-                      <Badge pill bg="danger" className="position-absolute end-0">
+          {lastMsgs.map((msg) => {
+            const targetUserId = msg.to === user._id ? msg.from : msg.to;
+            const { avater, name, username } = users[targetUserId];
+            return (
+              <li key={msg._id} className="mb-2">
+                <Card
+                  bg="primary"
+                  className="border-0"
+                  onClick={() => history.push(`/chat/${targetUserId}`)}
+                >
+                  <Card.Body className="d-flex align-items-center">
+                    <div className="frame-chat ratio ratio-1x1">
+                      <Card.Img
+                        varient="top"
+                        src={
+                          require(`../../assets/avaters/${
+                            avater || `dog-1`
+                          }.png`).default
+                        }
+                        alt="avater"
+                      />
+                    </div>
+                    <div className="ms-2">
+                      <Card.Title className="text-success mb-1">
+                        {name}
+                        <span className="fs-6">（ {username} ）</span>
+                      </Card.Title>
+                      <Card.Text className="m-0">{msg.content}</Card.Text>
+                    </div>
+                    {msg.unReadCount ? (
+                      <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
                         {msg.unReadCount}
-                      </Badge>
-                    ) : null
-                  }
-                </Card.Body>
-              </Card>
-            </ListGroup.Item>
-          );
-        })}
+                      </span>
+                    ) : null}
+                  </Card.Body>
+                </Card>
+              </li>
+            );
+          })}
         </QueueAnim>
-      </ListGroup>
+      </ul>
     </Container>
   );
 }

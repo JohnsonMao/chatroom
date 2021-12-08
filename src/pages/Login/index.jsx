@@ -32,7 +32,7 @@ export default function Login() {
 
   return (
     <>
-      <HeaderNavbar title="匿名聊天平台"/>
+      <HeaderNavbar title="ㄚ貓ㄚ狗聊天室"/>
       <Logo />
       <Container>
         <Form onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ export default function Login() {
 
           <div className="d-flex justify-content-between align-items-center">
             <Link to="/register">沒有帳號 ?</Link>
-            <Button type="submit" className="btn-primary">登入</Button>
+            <Button type="submit" className="btn-light px-4 py-2">登入</Button>
           </div>
 
           { msg ? <div className="text-center text-danger">{msg}</div> : null }
