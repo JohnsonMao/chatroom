@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container } from 'react-bootstrap';
+import { Container } from "react-bootstrap";
 import Cookies from "js-cookie";
 
 import UserInfo from "../User_info";
@@ -74,10 +74,9 @@ export default function Main() {
 
   const currentNav = navList.find((nav) => nav.path === path);
 
-
   return (
     <>
-      {currentNav ? <HeaderNavbar title={currentNav.title} /> : null}
+      <HeaderNavbar title={currentNav?.title || '聊天訊息'} />
       <Container>
         <Switch>
           {navList.map((item) => (
@@ -91,10 +90,8 @@ export default function Main() {
           <Route path="/chat/:userid" component={Chat} />
           <Route component={Error} />
         </Switch>
+        <FooterNavbar navList={navList} unReadCount={unReadCount} />        
       </Container>
-      {currentNav ? (
-        <FooterNavbar navList={navList} unReadCount={unReadCount} />
-      ) : null}
     </>
   );
 }

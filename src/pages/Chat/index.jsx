@@ -8,7 +8,7 @@ import { Container, Card, Button, Row, Col, Modal } from "react-bootstrap";
 import emojis from "../../utils/emojis_config";
 import { sendMsg, readMsg } from "../../redux/actions";
 import HeaderNavbar from "../../components/HeaderNavbar";
-import Message from '../Message';
+import Message from "../Message";
 
 export default function Chat() {
   const user = useSelector((state) => state.user);
@@ -63,14 +63,12 @@ export default function Chat() {
 
   return (
     <>
-      <div className="position-fixed top-0 start-0 end-0 bg-primary bg-header shadow"></div>
-      <div className="position-fixed bottom-0 start-0 end-0 bg-primary bg-footer"></div>
       <Row className="position-relative gx-2 mt-0 vh-100">
-        <Col lg="4" className="position-absolute top-0 start-0 border-end border-primary">
-          <HeaderNavbar
-            title="聊天訊息"
-            prev={() => history.goBack()}
-          />
+        <Col
+          lg="4"
+          className="position-absolute top-0 start-0 border-end border-primary d-none d-lg-block"
+        >
+          <HeaderNavbar title="聊天訊息" />
           <Message />
         </Col>
         <Col lg="8" className="position-absolute top-0 end-0">
@@ -111,7 +109,7 @@ export default function Chat() {
               ))}
             </ul>
           </div>
-          <div className="position-absolute botton-0 start-0 end-0 bg-primary py-2">
+          <div className="position-absolute botton-0 start-0 end-0 bg-primary zIndex-1 py-2">
             <Container>
               <Row className="g-1">
                 <Col>
@@ -150,7 +148,9 @@ export default function Chat() {
                 {emojis.map((emoji) => (
                   <Col
                     key={emoji}
-                    onClick={(e) => setContent(content + e.target.dataset.emoji)}
+                    onClick={(e) =>
+                      setContent(content + e.target.dataset.emoji)
+                    }
                     data-emoji={emoji}
                   >
                     <span data-emoji={emoji} className="d-block text-center">

@@ -46,52 +46,74 @@ export default function Message() {
   const history = useHistory();
 
   const lastMsgs = getLastMsgs(chatMsgs, user._id);
-
+  const { pathname } = history.location;
   return (
-    <QueueAnim type="left" component="ul" className="desktop-content p-2 pt-3">
-      {lastMsgs.map((msg) => {
-        const targetUserId = msg.to === user._id ? msg.from : msg.to;
-        const { avater, name, username } = users[targetUserId];
-        return (
-          <li key={msg._id} className="mb-2">
-            <Card
-              bg="primary"
-              className="border-0"
-              onClick={() => history.push(`/chat/${targetUserId}`)}
-            >
-              <Card.Body as={Row} className="gx-2 d-flex">
-                <Col xs="3" md="2" lg="4">
-                  <div className="ratio ratio-1x1">
-                    <Card.Img
-                      varient="top"
-                      src={
-                        require(`../../assets/avaters/${
-                          avater || `dog-1`
-                        }.png`).default
-                      }
-                      alt="avater"
-                    />
-                  </div>
-                </Col>
-                <Col>
-                  <div className="ms-2">
-                    <Card.Title className="text-success text-line text-line-1 mb-1">
-                      {name}
-                      <span className="fs-6">（ {username} ）</span>
-                    </Card.Title>
-                    <Card.Text className="text-line text-line-2 m-0">{msg.content}</Card.Text>
-                  </div>
-                </Col>
-                {msg.unReadCount ? (
-                  <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
-                    {msg.unReadCount}
-                  </span>
-                ) : null}
-              </Card.Body>
-            </Card>
-          </li>
-        );
-      })}
-    </QueueAnim>
+    <Row className="position-relative gx-2 mt-0 vh-100">
+      <Col
+        lg={pathname === "/message" ? "4" : "12"}
+        className="position-absolute top-0 start-0 border-end border-primary"
+      >
+        <QueueAnim
+          type="left"
+          component="ul"
+          className="desktop-content p-2 pt-3"
+        >
+          {lastMsgs.map((msg) => {
+            const targetUserId = msg.to === user._id ? msg.from : msg.to;
+            const { avater, name, username } = users[targetUserId];
+            return (
+              <li key={msg._id} className="mb-2">
+                <Card
+                  bg="primary"
+                  className="border-0"
+                  onClick={() => history.push(`/chat/${targetUserId}`)}
+                >
+                  <Card.Body as={Row} className="gx-2 d-flex">
+                    <Col xs="3" md="2" lg="4">
+                      <div className="ratio ratio-1x1">
+                        <Card.Img
+                          varient="top"
+                          src={
+                            require(`../../assets/avaters/${
+                              avater || `dog-1`
+                            }.png`).default
+                          }
+                          alt="avater"
+                        />
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="ms-2">
+                        <Card.Title className="text-success text-line text-line-1 mb-1">
+                          {name}
+                          <span className="fs-6">（ {username} ）</span>
+                        </Card.Title>
+                        <Card.Text className="text-line text-line-2 m-0">
+                          {msg.content}
+                        </Card.Text>
+                      </div>
+                    </Col>
+                    {msg.unReadCount ? (
+                      <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
+                        {msg.unReadCount}
+                      </span>
+                    ) : null}
+                  </Card.Body>
+                </Card>
+              </li>
+            );
+          })}
+        </QueueAnim>
+      </Col>
+      <div
+        className={`position-absolute top-0 end-0 d-none ${
+          pathname === "/message" ? "col-lg-8 d-lg-block" : ""
+        }`}
+      >
+        <p className="desktop-content fs-3 d-flex align-items-center justify-content-center">
+          趕快找人聊天吧～
+        </p>
+      </div>
+    </Row>
   );
 }
