@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, FloatingLabel, Container, Row, Col } from 'react-bootstrap';
+import { Form, FloatingLabel, Container, Row, Col, Button } from 'react-bootstrap';
 
 import HeaderNavbar from '../../components/HeaderNavbar';
 import AvaterSelector from '../../components/Avater_selector';
@@ -20,7 +20,6 @@ export default function UserInfo() {
     name: user?.name || '',
     info: user?.info || ''
   });
-  console.log(user)
   const dispatch = useDispatch();
   
   const setAvater = (e) => {
@@ -32,15 +31,21 @@ export default function UserInfo() {
     })
   }
   
-  const handleSubmit = () => {
-    dispatch( updateUser(userForm));
+  const handleSubmit = (e) => {
+    if (!userForm.name) {
+      console.log(e.target)
+    } else {
+      dispatch( updateUser(userForm));
+    }
   }
+
+  const history = useHistory();
   
   return (
     <>
       <HeaderNavbar title="個人資料設定"/>
-      <Container>
-        <Form>
+      <Container className="desktop-content">
+        <Form onSubmit={handleSubmit}>
           <AvaterSelector setAvater={setAvater} avater={userForm.avater} />
 
           <FloatingLabel controlId="name" label="暱稱" className="mb-3">
@@ -48,7 +53,9 @@ export default function UserInfo() {
               name="name"
               onChange={setUserForm}
               value={userForm.name}
+              maxLength="12"
               placeholder="請輸入暱稱"
+              isrequired="true"
             />
           </FloatingLabel>
 
@@ -62,7 +69,7 @@ export default function UserInfo() {
             />
           </FloatingLabel>
 
-          <Form.Group as={Row} className="align-items-center g-0 mb-3">
+          <Form.Group as={Row} className="align-items-center g-0 mb-1">
             <Form.Label as="legend" column className="col-4">
               性別：
             </Form.Label>
@@ -137,11 +144,19 @@ export default function UserInfo() {
               onChange={setUserForm}
               placeholder="請輸入自我介紹，讓大家更認識你！"
               value={userForm.info}
+              maxLength="100"
               style={{ height: '100px' }}
             />
           </FloatingLabel>
 
-          <Link to="user" className="btn btn-primary w-100" onClick={handleSubmit}>保 存</Link>
+          <Row className="gx-2">
+            <Col>
+              <Button className="w-100" onClick={() => history.goBack()}>返 回</Button>
+            </Col>
+            <Col>
+              <Button type="submit" className="btn btn-success w-100">保 存</Button>
+            </Col>
+          </Row>
         </Form>
       </Container>
     </>

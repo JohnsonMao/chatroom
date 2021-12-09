@@ -13,15 +13,15 @@ export default function UserList(props) {
   const history = useHistory();
 
   return (
-    <QueueAnim type="scale" component="ul" className="pt-2">
+    <QueueAnim type="scale" component="ul" className="desktop-content row g-3 p-2 pt-3">
       {userList.map((user) => (
-        <li key={user._id} className="mb-2 border-0">
+        <Col as="li" xs="12" md="6" lg="4" key={user._id}>
           <Card
             bg="primary"
             onClick={() => history.push(`/chat/${user._id}`)}
           >
-            <Card.Body as={Row} className="gx-2">
-              <Col xs="4">
+            <Card.Body as={Row} className="gx-2 align-items-center">
+              <Col xs="4" md="2" lg="4">
                 <div className="ratio ratio-1x1">
                   <Card.Img
                     varient="top"
@@ -36,20 +36,20 @@ export default function UserList(props) {
               </Col>
               <Col>
                 <div>
-                  <Card.Title className="text-success">
+                  <Card.Title className="text-success text-line text-line-1">
                     {user.name}
                     <span className="fs-6 text-light">（ {user.username} ）</span>
                   </Card.Title>
                   <ul>
                     <li>生日：{user.birthday || "未填寫"}</li>
                     <li>性別：{user.gender || "未填寫"}</li>
-                    <li>簡介：{user.info || "未填寫"}</li>
+                    <li className="text-line text-line-1">簡介：{user.info || "未填寫"}</li>
                   </ul>
                 </div>
               </Col>
             </Card.Body>
           </Card>
-        </li>
+        </Col>
       ))}
     </QueueAnim>
   );

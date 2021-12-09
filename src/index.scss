@@ -47,4 +47,62 @@
   }
 }
 
+.chat {
+  &-target::before,
+  &-me::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    border-width: 10px;
+    border-style: solid;
+  }
+  &-target::before {
+    left: -18px;
+    border-color: transparent $primary transparent transparent;
+  }
+  &-me::before {
+    right: -18px;
+    border-color: transparent transparent transparent $primary;
+  }
+}
+
+.text-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+
+  &-1 {
+    -webkit-line-clamp: 1;
+  }
+
+  &-2 {
+    -webkit-line-clamp: 2;
+  }
+}
+
+.desktop-content {
+  margin-top: 56px;
+  height: calc(100vh - 110px);
+  overflow-y: auto;
+  
+  &.row {
+    height: auto;
+    max-height: calc(100vh - 110px);
+  }
+}
+
+.bg {
+  &-header {
+    height: 56px;
+  }
+  &-footer {
+    height: 54px;
+  }
+}
+
+.position-absolute .shadow {
+  box-shadow: none !important;
+}
+
 @import "~bootstrap/scss/utilities/api";

@@ -5,8 +5,6 @@
 }
 
 body {
-  padding-top: 58px;
-  padding-bottom: 48px;
   background: $body-bg;
   color: $body-color;
 }
@@ -46,4 +44,22 @@ input[type='radio']:checked {
 
 input[type='radio']:checked + label {
   color: $success;
+}
+
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+::-webkit-scrollbar
+{
+  background: $primary;
+  width: 4px;
+
+  &-thumb
+  {
+    background: $light;
+    width: 4px;
+    cursor: pointer;
+  }
 }

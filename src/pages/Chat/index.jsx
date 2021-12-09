@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Container,
-  Card,
-  Button,
-  Row,
-  Col
-} from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Container, Card, Button, Row, Col, Modal } from "react-bootstrap";
 
+import emojis from "../../utils/emojis_config";
 import { sendMsg, readMsg } from "../../redux/actions";
 import HeaderNavbar from "../../components/HeaderNavbar";
+import Message from '../Message';
 
 export default function Chat() {
   const user = useSelector((state) => state.user);
@@ -20,7 +16,11 @@ export default function Chat() {
   const dispatch = useDispatch();
   const { userid } = useParams();
   const [content, setContent] = useState("");
-  const [show, setShow] = useState(false);      // 控制顯示表情列表
+  const [emojiShow, setEmojiShow] = useState(false); // 控制顯示表情列表
+  const [infoShow, setInfoShow] = useState(false); // 控制顯示對方自我介紹
+  const toggleShow = () => {
+    setInfoShow(!infoShow);
+  };
   const history = useHistory();
 
   const meId = user._id; // 我的 id
@@ -30,10 +30,8 @@ export default function Chat() {
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
     // 已讀訊息方法
-    dispatch( readMsg(targetId, meId));
-  }, [chatMsgs.length, dispatch, meId, targetId])
-
-  const emojis = ["😀","😆","😅","😂","🤣","😇","😉","🙂","😋","🙃","😍","🥰","😘","🤪","😝","🤑","😎","🤡","🥳","🤬","🤐","😒","🙄","😱","😵","🤮","😴","😈","🥴","😥","💩","👌","🧠","🙏","🤒","👻"]
+    dispatch(readMsg(targetId, meId));
+  }, [chatMsgs.length, dispatch, meId, targetId]);
 
   if (!users[meId]) return null; // 當資料還沒來時，先回傳 null
 
@@ -47,85 +45,139 @@ export default function Chat() {
         dispatch(sendMsg({ from, to, content }));
       }
       setContent("");
-      setShow(false);
+      setEmojiShow(false);
     }
   };
 
   const { target, me } = {
     target: {
-      style: "flex-row border-0 mb-1",
-      avater: require(`../../assets/avaters/${users[targetId].avater}.png`).default
+      style: "gx-2 flex-row border-0 mb-1",
+      avater: require(`../../assets/avaters/${users[targetId].avater}.png`)
+        .default,
     },
     me: {
-      style: "flex-row-reverse border-0 mb-1",
-      avater: require(`../../assets/avaters/${user.avater}.png`).default
+      style: "gx-2 flex-row-reverse border-0 mb-1",
+      avater: require(`../../assets/avaters/${user.avater}.png`).default,
     },
   };
 
   return (
     <>
-      <HeaderNavbar title={users[targetId].name} subtitle={`（ ${users[targetId].username} ）`} 
-        prev={() => history.goBack()}/>
-      <Container className="mt-1">
-        <ul>
-          {msgs.map((msg) => (
-            <li key={msg._id}>
-              <Card bg="secondary" as={Row} className={meId === msg.to ? target.style : me.style}>
-                <Col xs="2">
-                  <div className="ratio ratio-1x1">
-                    <Card.Img
-                      src={meId === msg.to ? target.avater : me.avater}
-                      alt="avater"
-                    />
-                  </div>
-                </Col>
+      <div className="position-fixed top-0 start-0 end-0 bg-primary bg-header shadow"></div>
+      <div className="position-fixed bottom-0 start-0 end-0 bg-primary bg-footer"></div>
+      <Row className="position-relative gx-2 mt-0 vh-100">
+        <Col lg="4" className="position-absolute top-0 start-0 border-end border-primary">
+          <HeaderNavbar
+            title="聊天訊息"
+            prev={() => history.goBack()}
+          />
+          <Message />
+        </Col>
+        <Col lg="8" className="position-absolute top-0 end-0">
+          <HeaderNavbar
+            title={users[targetId].name}
+            subtitle={`（ ${users[targetId].username} ）`}
+            prev={() => history.goBack()}
+            toggleShow={toggleShow}
+          />
+          <div>
+            <ul className="desktop-content p-3 pb-0">
+              {msgs.map((msg) => (
+                <li key={msg._id}>
+                  <Card
+                    bg="secondary"
+                    as={Row}
+                    className={meId === msg.to ? target.style : me.style}
+                  >
+                    <Col xs="2" md="1">
+                      <div className="ratio ratio-1x1">
+                        <Card.Img
+                          src={meId === msg.to ? target.avater : me.avater}
+                          alt="avater"
+                        />
+                      </div>
+                    </Col>
+                    <Col xs="8" md="10">
+                      <p
+                        className={`position-relative bg-primary rounded p-2 mt-1 ${
+                          meId === msg.to ? "chat-target" : "chat-me"
+                        }`}
+                      >
+                        {msg.content}
+                      </p>
+                    </Col>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="position-absolute botton-0 start-0 end-0 bg-primary py-2">
+            <Container>
+              <Row className="g-1">
                 <Col>
-                  <p className="bg-primary p-2">{msg.content}</p>
+                  <input
+                    placeholder="開始聊天"
+                    onChange={(e) => setContent(e.target.value)}
+                    onKeyUp={handleSend}
+                    onFocus={() => setEmojiShow(false)}
+                    value={content}
+                    className="w-100 h-100 bg-secondary border-0 rounded text-light ps-2"
+                    aria-label="Start chat"
+                    aria-describedby="send"
+                  />
                 </Col>
-              </Card>
-            </li>
-          ))}
-        </ul>
-      </Container>
-      <div className="fixed-bottom bg-primary py-2">
-        <Container>
-          <Row className="g-1">
-            <Col>
-              <input
-                placeholder="開始聊天"
-                onChange={(e) => setContent(e.target.value)}
-                onKeyUp={handleSend}
-                onFocus={() => setShow(false)}
-                value={content}
-                className="w-100 h-100 bg-secondary border-0 rounded text-light ps-2"
-                aria-label="Start chat"
-                aria-describedby="send"
-              />
-            </Col>
-            <Col xs="auto">
-              <Button variant="primary" type="button" onClick={() => setShow(!show)}>
-                🙂
-              </Button>
-            </Col>
-            <Col xs="auto">
-              <Button variant="primary" type="button" id="send" onClick={handleSend}>
-                <FontAwesomeIcon icon={"paper-plane"}/>
-              </Button>
-            </Col>
-          </Row>
-          <Row xs={6} className={`emoji ${show ? "emoji__show" : ""}`}>
-            {
-              emojis.map(emoji => (
-                <Col key={emoji}
-                  onClick={(e) => setContent(content + e.target.dataset.emoji)}
-                  data-emoji={emoji}>
-                  <span data-emoji={emoji} className="d-block text-center">{ emoji }</span>
+                <Col xs="auto">
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={() => setEmojiShow(!emojiShow)}
+                  >
+                    🙂
+                  </Button>
                 </Col>
-              ))
-            }
-          </Row>
-        </Container>
-      </div>
+                <Col xs="auto">
+                  <Button
+                    variant="primary"
+                    type="button"
+                    id="send"
+                    onClick={handleSend}
+                  >
+                    <FontAwesomeIcon icon={"paper-plane"} />
+                  </Button>
+                </Col>
+              </Row>
+              <Row xs={6} className={`emoji ${emojiShow ? "emoji__show" : ""}`}>
+                {emojis.map((emoji) => (
+                  <Col
+                    key={emoji}
+                    onClick={(e) => setContent(content + e.target.dataset.emoji)}
+                    data-emoji={emoji}
+                  >
+                    <span data-emoji={emoji} className="d-block text-center">
+                      {emoji}
+                    </span>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          </div>
+        </Col>
+      </Row>
+      <Modal
+        show={infoShow}
+        onHide={toggleShow}
+        contentClassName="bg-primary"
+        centered
+      >
+        <Modal.Header className="border-0" closeButton>
+          <Modal.Title as="h3" className="text-light text-center w-100">
+            {users[targetId].name}的自我介紹
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{users[targetId].info}</p>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

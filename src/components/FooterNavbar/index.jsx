@@ -17,7 +17,8 @@ export default function FooterNavbar(props) {
 
   return (
     <>
-      <Navbar fixed="bottom" bg="primary" className="p-0">
+      <Navbar bg="primary" className="position-absolute bottom-0 start-0 end-0
+       p-0">
         <Container>
           <Nav justify className="w-100" as="ul">
             {

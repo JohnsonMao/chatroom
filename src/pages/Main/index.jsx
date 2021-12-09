@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Container } from 'react-bootstrap';
 import Cookies from "js-cookie";
 
 import UserInfo from "../User_info";
@@ -35,18 +36,11 @@ export default function Main() {
   // route
   const navList = [
     {
-      path: "/femalepartner",
-      component: () => <Partner userListType="malePartner" />,
-      title: "尋找女伴",
+      path: "/partner",
+      component: Partner,
+      title: "尋找伴侶",
       icon: "user-friends",
-      text: "女伴",
-    },
-    {
-      path: "/malepartner",
-      component: () => <Partner userListType="femalePartner" />,
-      title: "尋找男伴",
-      icon: "user-friends",
-      text: "男伴",
+      text: "伴侶",
     },
     {
       path: "/message",
@@ -71,40 +65,33 @@ export default function Main() {
   if (!user._id) {
     return null;
   } else {
-    if (path === "/") {
+    if (path === "/" || path === "/partner") {
       console.log(user);
-      path = getRedirectTo(user.userType, user.name);
+      path = getRedirectTo(user.name);
       return <Redirect to={path} />;
     }
   }
 
   const currentNav = navList.find((nav) => nav.path === path);
 
-  // 根據用戶類型過濾 FooterNavbar 的 navList
-  if (currentNav) {
-    if (user.userType === "malePartner") {
-      navList[0].hide = true;
-    } else {
-      navList[1].hide = true;
-    }
-  }
-
 
   return (
     <>
       {currentNav ? <HeaderNavbar title={currentNav.title} /> : null}
-      <Switch>
-        {navList.map((item) => (
-          <Route
-            key={item.component}
-            path={item.path}
-            component={item.component}
-          />
-        ))}
-        <Route path="/userinfo" component={UserInfo} />
-        <Route path="/chat/:userid" component={Chat} />
-        <Route component={Error} />
-      </Switch>
+      <Container>
+        <Switch>
+          {navList.map((item) => (
+            <Route
+              key={item.component}
+              path={item.path}
+              component={item.component}
+            />
+          ))}
+          <Route path="/userinfo" component={UserInfo} />
+          <Route path="/chat/:userid" component={Chat} />
+          <Route component={Error} />
+        </Switch>
+      </Container>
       {currentNav ? (
         <FooterNavbar navList={navList} unReadCount={unReadCount} />
       ) : null}

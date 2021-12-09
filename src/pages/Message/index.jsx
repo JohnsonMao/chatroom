@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import QueueAnim from "rc-queue-anim";
-import { Container, Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 
 /* 取得每個聊天的最後一條訊息 */
 function getLastMsgs(chatMsgs, userid) {
@@ -48,52 +48,50 @@ export default function Message() {
   const lastMsgs = getLastMsgs(chatMsgs, user._id);
 
   return (
-    <Container>
-      <QueueAnim type="left" component="ul" className="pt-2">
-        {lastMsgs.map((msg) => {
-          const targetUserId = msg.to === user._id ? msg.from : msg.to;
-          const { avater, name, username } = users[targetUserId];
-          return (
-            <li key={msg._id} className="mb-2">
-              <Card
-                bg="primary"
-                className="border-0"
-                onClick={() => history.push(`/chat/${targetUserId}`)}
-              >
-                <Card.Body as={Row} className="d-flex align-items-center">
-                  <Col>
-                    <div className="ratio ratio-1x1">
-                      <Card.Img
-                        varient="top"
-                        src={
-                          require(`../../assets/avaters/${
-                            avater || `dog-1`
-                          }.png`).default
-                        }
-                        alt="avater"
-                      />
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="ms-2">
-                      <Card.Title className="text-success mb-1">
-                        {name}
-                        <span className="fs-6">（ {username} ）</span>
-                      </Card.Title>
-                      <Card.Text className="m-0">{msg.content}</Card.Text>
-                    </div>
-                  </Col>
-                  {msg.unReadCount ? (
-                    <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
-                      {msg.unReadCount}
-                    </span>
-                  ) : null}
-                </Card.Body>
-              </Card>
-            </li>
-          );
-        })}
-      </QueueAnim>
-    </Container>
+    <QueueAnim type="left" component="ul" className="desktop-content p-2 pt-3">
+      {lastMsgs.map((msg) => {
+        const targetUserId = msg.to === user._id ? msg.from : msg.to;
+        const { avater, name, username } = users[targetUserId];
+        return (
+          <li key={msg._id} className="mb-2">
+            <Card
+              bg="primary"
+              className="border-0"
+              onClick={() => history.push(`/chat/${targetUserId}`)}
+            >
+              <Card.Body as={Row} className="gx-2 d-flex">
+                <Col xs="3" md="2" lg="4">
+                  <div className="ratio ratio-1x1">
+                    <Card.Img
+                      varient="top"
+                      src={
+                        require(`../../assets/avaters/${
+                          avater || `dog-1`
+                        }.png`).default
+                      }
+                      alt="avater"
+                    />
+                  </div>
+                </Col>
+                <Col>
+                  <div className="ms-2">
+                    <Card.Title className="text-success text-line text-line-1 mb-1">
+                      {name}
+                      <span className="fs-6">（ {username} ）</span>
+                    </Card.Title>
+                    <Card.Text className="text-line text-line-2 m-0">{msg.content}</Card.Text>
+                  </div>
+                </Col>
+                {msg.unReadCount ? (
+                  <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
+                    {msg.unReadCount}
+                  </span>
+                ) : null}
+              </Card.Body>
+            </Card>
+          </li>
+        );
+      })}
+    </QueueAnim>
   );
 }

@@ -19,10 +19,10 @@ export default function User() {
   }
   
   return (
-    <Container className="pb-5">
+    <Container className="desktop-content pb-2">
       <Card bg="secondary" className="border-0 my-3">
         <Card.Body as={Row} className="align-items-end text-center">
-          <Col xs="4">
+          <Col xs="4" md="2">
             <div className="ratio ratio-1x1">
               <Card.Img varient="top" 
                 src={require(`../../assets/avaters/${user.avater}.png`).default}
