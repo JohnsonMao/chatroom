@@ -65,7 +65,7 @@ export default function Main() {
   if (!user._id) {
     return null;
   } else {
-    if (path === "/" || path === "/partner") {
+    if (path === "/") {
       console.log(user);
       path = getRedirectTo(user.name);
       return <Redirect to={path} />;

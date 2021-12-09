@@ -11,7 +11,6 @@ export default function Partner() {
   const dispatch = useDispatch();
 
   const userType =  user.userType === 'malePartner' ? 'femalePartner' : 'malePartner';
-
   useEffect(() => {
     dispatch( getUserList(userType));
   },[dispatch, userType])

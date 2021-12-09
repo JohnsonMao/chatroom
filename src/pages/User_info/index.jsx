@@ -1,63 +1,83 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Form, FloatingLabel, Container, Row, Col, Button } from 'react-bootstrap';
+import React, { useState, useRef } from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  Form,
+  FloatingLabel,
+  Container,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap";
 
-import HeaderNavbar from '../../components/HeaderNavbar';
-import AvaterSelector from '../../components/Avater_selector';
+import HeaderNavbar from "../../components/HeaderNavbar";
+import AvaterSelector from "../../components/Avater_selector";
 import useForm from "../../utils/useFormHook";
-import { updateUser } from '../../redux/actions';
+import { updateUser } from "../../redux/actions";
 
 export default function UserInfo() {
-  
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
 
   const [userForm, setUserForm] = useForm({
     userType: user?.userType,
-    avater: user?.avater || 'dog-4',
-    birthday: user?.birthday || '',
-    gender: user?.gender || '',
-    name: user?.name || '',
-    info: user?.info || ''
+    avater: user?.avater || "dog-4",
+    birthday: user?.birthday || "",
+    gender: user?.gender || "",
+    name: user?.name || "",
+    info: user?.info || "",
   });
+
+  const [required, setRequired] = useState(false);
+  const nameRef = useRef(null)
+
   const dispatch = useDispatch();
-  
+
   const setAvater = (e) => {
     setUserForm({
       target: {
         name: "avater",
-        value: e.avater
-      }
-    })
-  }
-  
+        value: e.avater,
+      },
+    });
+  };
+
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (!userForm.name) {
-      console.log(e.target)
+      setRequired(true);
     } else {
-      dispatch( updateUser(userForm));
+      dispatch(updateUser(userForm));
+      history.replace('/');
     }
-  }
+  };
 
   const history = useHistory();
-  
+
   return (
     <>
-      <HeaderNavbar title="個人資料設定"/>
+      <HeaderNavbar title="個人資料設定" />
       <Container className="desktop-content">
         <Form onSubmit={handleSubmit}>
           <AvaterSelector setAvater={setAvater} avater={userForm.avater} />
 
-          <FloatingLabel controlId="name" label="暱稱" className="mb-3">
-            <Form.Control
-              name="name"
-              onChange={setUserForm}
-              value={userForm.name}
-              maxLength="12"
-              placeholder="請輸入暱稱"
-              isrequired="true"
-            />
-          </FloatingLabel>
+          <div className="position-relative">
+            <FloatingLabel controlId="name" label="暱稱" className="mb-3">
+              <Form.Control
+                name="name"
+                onChange={setUserForm}
+                value={userForm.name}
+                maxLength="12"
+                placeholder="請輸入暱稱"
+                className={required ? "border-danger" : "border-light"}
+                ref={nameRef}
+              />
+            </FloatingLabel>
+            {required && !nameRef.current.value ? (
+              <span className="position-absolute bottom-0 end-0 bg-danger px-2 rounded">
+                暱稱必須填寫
+              </span>
+            ) : null}
+          </div>
 
           <FloatingLabel controlId="birthday" label="生日" className="mb-3">
             <Form.Control
@@ -108,7 +128,6 @@ export default function UserInfo() {
             </Col>
           </Form.Group>
 
-
           <Form.Group as={Row} className="align-items-center g-0 mb-3">
             <Form.Label as="legend" column className="col-4">
               尋找伴侶：
@@ -145,20 +164,24 @@ export default function UserInfo() {
               placeholder="請輸入自我介紹，讓大家更認識你！"
               value={userForm.info}
               maxLength="100"
-              style={{ height: '100px' }}
+              style={{ height: "100px" }}
             />
           </FloatingLabel>
 
           <Row className="gx-2">
             <Col>
-              <Button className="w-100" onClick={() => history.goBack()}>返 回</Button>
+              <Button className="w-100" onClick={() => history.goBack()}>
+                返 回
+              </Button>
             </Col>
             <Col>
-              <Button type="submit" className="btn btn-success w-100">保 存</Button>
+              <Button type="submit" className="btn btn-success w-100">
+                保 存
+              </Button>
             </Col>
           </Row>
         </Form>
       </Container>
     </>
-  )
+  );
 }
