@@ -112,7 +112,26 @@ export default function Chat() {
             </ul>
           </div>
           <div className="position-absolute botton-0 start-0 end-0 bg-primary zIndex-1 py-2">
-            <Container>
+            <Container className="position-absolute bottom-100 bg-primary rounded-top">
+              <Row xs={6} className={`emoji ${emojiShow ? "emoji__show" : ""}`}>
+                  {emojis.map((emoji) => (
+                    <Col
+                      key={emoji}
+                      onClick={(e) =>
+                        setContent(content + e.target.dataset.emoji)
+                      }
+                      data-emoji={emoji}
+                    >
+                      <span data-emoji={emoji} className="d-block text-center">
+                        {emoji}
+                      </span>
+                    </Col>
+                  ))}
+                </Row>
+
+            </Container>
+          <Container>
+              
               <Row className="g-1">
                 <Col>
                   <input
@@ -146,21 +165,7 @@ export default function Chat() {
                   </Button>
                 </Col>
               </Row>
-              <Row xs={6} className={`emoji ${emojiShow ? "emoji__show" : ""}`}>
-                {emojis.map((emoji) => (
-                  <Col
-                    key={emoji}
-                    onClick={(e) =>
-                      setContent(content + e.target.dataset.emoji)
-                    }
-                    data-emoji={emoji}
-                  >
-                    <span data-emoji={emoji} className="d-block text-center">
-                      {emoji}
-                    </span>
-                  </Col>
-                ))}
-              </Row>
+              
             </Container>
           </div>
         </Col>

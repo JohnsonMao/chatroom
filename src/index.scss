@@ -21,7 +21,14 @@
 @import "~bootstrap/scss/grid";
 // 5. Add additional custom code here
 
-@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/navbar';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/helpers';
+
 @import "./assets/scss/custom_base";
 
 .nav-item {
@@ -39,7 +46,7 @@
   padding-top: 0;
   height: 0;
   overflow: hidden;
-  transition: .6s;
+  transition: .3s;
 
   &__show {
     padding-top: 4px;
