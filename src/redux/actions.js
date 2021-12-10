@@ -48,7 +48,7 @@ async function getMsgList (dispatch, userid) {
 // 發送訊息的非同步 action
 export const sendMsg = ({ from, to, content }) => {
   return (dispatch) => {
-    console.log("發送訊息", { from, to, content });
+    console.log("發送訊息", content);
     io.socket.emit("sendMsg", { from, to, content });
   };
 };

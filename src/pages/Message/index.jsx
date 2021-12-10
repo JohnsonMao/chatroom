@@ -56,7 +56,7 @@ export default function Message() {
         <QueueAnim
           type="left"
           component="ul"
-          className="desktop-content p-2 pt-3"
+          className="desktop-content p-2 pt-4"
         >
           {lastMsgs.map((msg) => {
             const targetUserId = msg.to === user._id ? msg.from : msg.to;
@@ -84,21 +84,21 @@ export default function Message() {
                     </Col>
                     <Col>
                       <div className="ms-2">
-                        <Card.Title className="text-success text-line text-line-1 mb-1">
+                        <Card.Title className="text-success text-line text-line-1 lh-1 mb-1">
                           {name}
                           <span className="fs-6">（ {username} ）</span>
                         </Card.Title>
-                        <Card.Text className="text-line text-line-2 m-0">
+                        <Card.Text className="text-line text-line-2 lh-sm m-0">
                           {msg.content}
                         </Card.Text>
                       </div>
                     </Col>
-                    {msg.unReadCount ? (
-                      <span className="bg-danger position-absolute end-0 translate-middle-x lh-1 rounded-pill px-2 py-1">
-                        {msg.unReadCount}
-                      </span>
-                    ) : null}
                   </Card.Body>
+                  {msg.unReadCount ? (
+                    <span className="bg-danger position-absolute end-0 top-0 lh-1 rounded p-1 pt-0">
+                      {msg.unReadCount > 100 ? '99+' : msg.unReadCount}
+                    </span>
+                  ) : null}
                 </Card>
               </li>
             );

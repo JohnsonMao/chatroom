@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +21,7 @@ export default function Chat() {
   const toggleShow = () => {
     setInfoShow(!infoShow);
   };
+  const chatRef = useRef(null);
   const history = useHistory();
 
   const meId = user._id; // 我的 id
@@ -28,7 +29,7 @@ export default function Chat() {
   const chatId = [meId, targetId].sort().join("_"); // 組合 id
 
   useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+    chatRef.current?.scrollTo(0, chatRef.current.scrollHeight);
     // 已讀訊息方法
     dispatch(readMsg(targetId, meId));
   }, [chatMsgs.length, dispatch, meId, targetId]);
@@ -43,6 +44,7 @@ export default function Chat() {
       const to = userid;
       if (content.trim()) {
         dispatch(sendMsg({ from, to, content }));
+        dispatch(readMsg(targetId, meId));
       }
       setContent("");
       setEmojiShow(false);
@@ -79,7 +81,7 @@ export default function Chat() {
             toggleShow={toggleShow}
           />
           <div>
-            <ul className="desktop-content p-3 pb-0">
+            <ul className="desktop-content p-3 pb-0" ref={chatRef}>
               {msgs.map((msg) => (
                 <li key={msg._id}>
                   <Card

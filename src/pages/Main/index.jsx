@@ -76,7 +76,7 @@ export default function Main() {
 
   return (
     <>
-      <HeaderNavbar title={currentNav?.title || '聊天訊息'} />
+      <HeaderNavbar title={currentNav?.title || "聊天訊息"} />
       <Container>
         <Switch>
           {navList.map((item) => (
@@ -90,7 +90,9 @@ export default function Main() {
           <Route path="/chat/:userid" component={Chat} />
           <Route component={Error} />
         </Switch>
-        <FooterNavbar navList={navList} unReadCount={unReadCount} />        
+        {path === "/userinfo" ? null : (
+          <FooterNavbar navList={navList} unReadCount={unReadCount} />
+        )}
       </Container>
     </>
   );

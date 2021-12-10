@@ -13,7 +13,7 @@ export default function UserList(props) {
   const history = useHistory();
 
   return (
-    <QueueAnim type="scale" component="ul" className="desktop-content row g-3 p-2 pt-3">
+    <QueueAnim type="scale" component="ul" interval={0} className="desktop-content row g-3 p-2">
       {userList.map((user) => (
         <Col as="li" xs="12" md="6" lg="4" key={user._id}>
           <Card
