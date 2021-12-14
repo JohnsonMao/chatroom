@@ -58,15 +58,13 @@ export default function Main() {
     },
   ];
 
-  // 為獲取到 cookie，跳轉登入頁面
+  // 未獲取到 cookie，跳轉登入頁面
   if (!userid) return <Redirect to="/login" />;
-
   // 獲取到 cookie，檢查 user._id，路由重新定向
   if (!user._id) {
     return null;
   } else {
     if (path === "/") {
-      console.log(user);
       path = getRedirectTo(user.name);
       return <Redirect to={path} />;
     }

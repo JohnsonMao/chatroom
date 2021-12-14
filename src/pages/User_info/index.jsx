@@ -47,8 +47,9 @@ export default function UserInfo() {
     if (!userForm.name) {
       setRequired(true);
     } else {
+      console.log(userForm)
+      history.replace('/partner');
       dispatch(updateUser(userForm));
-      history.replace('/');
     }
   };
 
